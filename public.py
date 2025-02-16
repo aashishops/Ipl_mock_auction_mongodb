@@ -31,6 +31,11 @@ st.header(selected_team)
 team_bids = [entry for entry in data if entry['ipl_team'] == selected_team]
 if team_bids:
     st.dataframe(team_bids)
-
+    # Calculate and display budget remaining
+    total_spent = sum(entry['bid_amount'] for entry in team_bids)
+    budget_remaining = (10000 - total_spent)/100
+    st.write(f"Budget remaining for {selected_team}: {budget_remaining:.2f} Crores")
 else:
     st.write(f"No bids for {selected_team} yet!")
+
+st.markdown("[Go to Final Teams Submission Page](https://iplmockauctionteampreview.streamlit.app/)")
