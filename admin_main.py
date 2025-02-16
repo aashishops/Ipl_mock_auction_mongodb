@@ -2,7 +2,10 @@ import streamlit as st
 from pymongo import MongoClient
 
 # MongoDB Connection
-mongo_uri = st.secrets["mongo_uri"]  # Use Streamlit secrets for MongoDB Atlas connection string
+
+mongo_uri = st.secrets["mongo_uri"]["mongo_uri"]
+
+print(mongo_uri)
 client = MongoClient(mongo_uri)
 db = client['players']  # Database name
 players_collection = db['playerslist']  # Collection with player names
