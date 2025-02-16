@@ -1,7 +1,6 @@
 import streamlit as st
 from pymongo import MongoClient
 
-# MongoDB Connection
 
 mongo_uri = st.secrets["mongo_uri"]["mongo_uri"]
 
@@ -16,6 +15,7 @@ st.title("IPL Mock Auction")
 
 # Fetch player names from MongoDB
 all_players = players_collection.find({}, {"_id": 0, "Player Name": 1})
+print("all players:",all_players)
 all_player_names = [player.get('Player Name', '') for player in all_players if 'Player Name' in player]
 
 # Fetch players who have already been bid on
@@ -31,7 +31,7 @@ with st.form("create_bid_form"):
     ipl_team = st.selectbox("IPL Team", [
         "Chennai Super Kings", "Mumbai Indians", "Royal Challengers Bangalore", 
         "Kolkata Knight Riders", "Sunrisers Hyderabad", "Delhi Capitals", 
-        "Rajasthan Royals", "Punjab Kings", "Lucknow Super Giants", "Gujarat Titans"
+        "Rajasthan Royals", "Punjab Kings", "Lucknow Super Giants", "Gujarat Titans","Unsold"
     ])
     bid_amount = st.number_input("Bid Amount (in Lakhs)", min_value=0, key="create_bid_amount")
     submit_button = st.form_submit_button("Create Bid")
