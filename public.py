@@ -30,6 +30,7 @@ data = list(bids_collection.find({}, {"_id": 0}))
 st.header(selected_team)
 team_bids = [entry for entry in data if entry['ipl_team'] == selected_team]
 if team_bids:
-    st.table(team_bids)
+    st.dataframe(team_bids)
+
 else:
     st.write(f"No bids for {selected_team} yet!")

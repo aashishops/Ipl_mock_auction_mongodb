@@ -4,7 +4,6 @@ from pymongo import MongoClient
 
 mongo_uri = st.secrets["mongo_uri"]["mongo_uri"]
 
-print("URI:::::::", mongo_uri)
 client = MongoClient(mongo_uri)
 db = client['players']  # Database name
 players_collection = db['playerslist']  # Collection with player names
@@ -13,10 +12,11 @@ bids_collection = db['players_bid']  # Collection for bids
 # Streamlit App
 st.title("IPL Mock Auction")
 
-# Fetch player names from MongoDB
-all_players = players_collection.find({}, {"_id": 0, "Player Name": 1})
-print("all players:",all_players)
-all_player_names = [player.get('Player Name', '') for player in all_players if 'Player Name' in player]
+# Fetch player names, Points, and roles from MongoDB
+all_players = players_collection.find({}, {"_id": 0, "Player Name": 1, "Points": 1, "Role": 1})
+
+all_player_data = [{"Player Name": player.get('Player Name', ''), "Points": player.get('Points', 0), "Role": player.get('Role', '')} for player in all_players]
+all_player_names = [player['Player Name'] for player in all_player_data if 'Player Name' in player]
 
 # Fetch players who have already been bid on
 bidded_players = bids_collection.distinct("player_name")
@@ -38,7 +38,12 @@ with st.form("create_bid_form"):
 
 if submit_button:
     if player_name and ipl_team and bid_amount:
-        bids_collection.insert_one({"player_name": player_name, "ipl_team": ipl_team, "bid_amount": bid_amount})
+        # Fetch player Points and role from playerslist
+        player_data = players_collection.find_one({"Player Name": player_name}, {"_id": 0, "Points": 1, "Role": 1})
+        Points = player_data.get('Points', 0) if player_data else 0
+        role = player_data.get('Role', '') if player_data else ''
+
+        bids_collection.insert_one({"player_name": player_name, "ipl_team": ipl_team, "bid_amount": bid_amount, "Points": Points, "Role": role})
         st.success("Bid created successfully!")
         st.rerun()
     else:
@@ -46,14 +51,11 @@ if submit_button:
 
 # Display Bids Data with Local Search
 st.write("## Current Bids")
-search_query = st.text_input("Search Bids")
 
 data = list(bids_collection.find({}, {"_id": 0}))
 
-if search_query:
-    data = [entry for entry in data if search_query.lower() in entry['player_name'].lower() or search_query.lower() in entry['ipl_team'].lower()]
 
-st.table(data)
+st.dataframe(data)
 
 # Edit Bid Form
 st.header("Edit Bid")
