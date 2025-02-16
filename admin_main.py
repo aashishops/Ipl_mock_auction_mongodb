@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 mongo_uri = st.secrets["mongo_uri"]["mongo_uri"]
 
-print("URI:", mongo_uri)
+print("URI:::::::", mongo_uri)
 client = MongoClient(mongo_uri)
 db = client['players']  # Database name
 players_collection = db['playerslist']  # Collection with player names
