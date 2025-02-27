@@ -79,6 +79,6 @@ if edit_submit_button:
         st.rerun()
     else:
         st.error("Please fill in all fields.")
-
-st.markdown("[Go to Final Teams Submission Page](https://iplmockauctionteampreview.streamlit.app)")
-st.markdown("[Go to Final Teams Page](https://iplmockauctionteampreview.streamlit.app/)")
+st.markdown("[Go to Team Bids View](https://iplmockauctionteampreview.streamlit.app/")
+st.markdown("[Go to Final Teams Submission Page](https://iplmockauctionapp-teamsubmit.streamlit.app)")
+st.markdown("[Go to Final Teams Page](https://iplmockauctionapp-teamviewer.streamlit.app/)")
