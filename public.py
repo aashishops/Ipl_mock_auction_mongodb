@@ -38,4 +38,4 @@ if team_bids:
 else:
     st.write(f"No bids for {selected_team} yet!")
 
-st.markdown("[Go to Final Teams Submission Page](https://iplmockauctionteampreview.streamlit.app/)")
+st.markdown("[Go to Final Teams Submission Page](https://iplmockauctionapp-teamsubmit.streamlit.app)")
